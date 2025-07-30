@@ -5772,7 +5772,96 @@ const FlipBook = () => {
 
   // Product data for galleries
   const productData = {
-    // ... (same as before)
+    "200ml": {
+      title: "200ml Water Bottles",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=200ml+Bottle+1",
+        "/placeholder.svg?height=400&width=300&text=200ml+Bottle+2",
+        "/placeholder.svg?height=400&width=300&text=200ml+Bottle+3",
+        "/placeholder.svg?height=400&width=300&text=200ml+Bottle+4",
+      ],
+    },
+    "250ml": {
+      title: "250ml Water Bottles",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=250ml+Bottle+1",
+        "/placeholder.svg?height=400&width=300&text=250ml+Bottle+2",
+        "/placeholder.svg?height=400&width=300&text=250ml+Bottle+3",
+        "/placeholder.svg?height=400&width=300&text=250ml+Bottle+4",
+      ],
+    },
+    "300ml": {
+      title: "300ml Water Bottles",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=300ml+Bottle+1",
+        "/placeholder.svg?height=400&width=300&text=300ml+Bottle+2",
+        "/placeholder.svg?height=400&width=300&text=300ml+Bottle+3",
+        "/placeholder.svg?height=400&width=300&text=300ml+Bottle+4",
+      ],
+    },
+    "500ml": {
+      title: "500ml Water Bottles",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=500ml+Bottle+1",
+        "/placeholder.svg?height=400&width=300&text=500ml+Bottle+2",
+        "/placeholder.svg?height=400&width=300&text=500ml+Bottle+3",
+        "/placeholder.svg?height=400&width=300&text=500ml+Bottle+4",
+      ],
+    },
+    "700ml": {
+      title: "700ml Water Bottles",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=700ml+Bottle+1",
+        "/placeholder.svg?height=400&width=300&text=700ml+Bottle+2",
+        "/placeholder.svg?height=400&width=300&text=700ml+Bottle+3",
+        "/placeholder.svg?height=400&width=300&text=700ml+Bottle+4",
+      ],
+    },
+    "1liter": {
+      title: "1 Liter Water Bottles",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=1L+Bottle+1",
+        "/placeholder.svg?height=400&width=300&text=1L+Bottle+3",
+        "/placeholder.svg?height=400&width=300&text=1L+Bottle+2",
+        "/placeholder.svg?height=400&width=300&text=1L+Bottle+4",
+      ],
+    },
+    "bio-200ml": {
+      title: "Biodegradable 200ml",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=Bio+200ml+1",
+        "/placeholder.svg?height=400&width=300&text=Bio+200ml+2",
+        "/placeholder.svg?height=400&width=300&text=Bio+200ml+3",
+        "/placeholder.svg?height=400&width=300&text=Bio+200ml+4",
+      ],
+    },
+    "bio-250ml": {
+      title: "Biodegradable 250ml",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=Bio+250ml+1",
+        "/placeholder.svg?height=400&width=300&text=Bio+250ml+2",
+        "/placeholder.svg?height=400&width=300&text=Bio+250ml+3",
+        "/placeholder.svg?height=400&width=300&text=Bio+250ml+4",
+      ],
+    },
+    "bio-300ml": {
+      title: "Biodegradable 300ml",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=Bio+300ml+1",
+        "/placeholder.svg?height=400&width=300&text=Bio+300ml+2",
+        "/placeholder.svg?height=400&width=300&text=Bio+300ml+3",
+        "/placeholder.svg?height=400&width=300&text=Bio+300ml+4",
+      ],
+    },
+    "bio-500ml": {
+      title: "Biodegradable 500ml",
+      images: [
+        "/placeholder.svg?height=400&width=300&text=Bio+500ml+1",
+        "/placeholder.svg?height=400&width=300&text=Bio+500ml+2",
+        "/placeholder.svg?height=400&width=300&text=Bio+500ml+3",
+        "/placeholder.svg?height=400&width=300&text=Bio+500ml+4",
+      ],
+    },
   };
 
   // Open product gallery
@@ -5786,7 +5875,7 @@ const FlipBook = () => {
   };
 
   const pages = [
-    // Page 0 - Cover Page (CLOSED BOOK - RIGHT SIDE ONLY)
+    // Page 0 - Cover Page (CLOSED BOOK - SINGLE PAGE)
     {
       type: "cover",
       isClosedBook: true,
@@ -5800,7 +5889,7 @@ const FlipBook = () => {
             overflow: "hidden",
             background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%)",
             border: "1px solid #e2e8f0",
-            borderRadius: "0 12px 12px 0", // Only round right corners
+            borderRadius: "12px",
             boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
             display: "flex",
             flexDirection: "column",
@@ -5883,7 +5972,7 @@ const FlipBook = () => {
       )
     },
 
-    // Page 1 - Full-fit Image (LEFT SIDE)
+    // Page 1 - Full-fit Image
     {
       type: "fullimage-left",
       content: (
@@ -5901,7 +5990,7 @@ const FlipBook = () => {
       ),
     },
 
-    // Page 2 - Full-fit Image (RIGHT SIDE)
+    // Page 2 - Full-fit Image
     {
       type: "fullimage-right",
       content: (
@@ -5919,11 +6008,291 @@ const FlipBook = () => {
       ),
     },
 
-    // Page 3 - INDEX PAGE (LEFT SIDE)
-    // ... (same as before)
+    // Page 3 - INDEX PAGE
+    {
+      type: "index",
+      content: (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            padding: "2vh 4vw",
+            boxSizing: "border-box",
+            background: "#ffffff",
+            fontFamily: "Georgia, serif",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "auto",
+          }}
+        >
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "1.5vh" }}>
+            <h1
+              style={{
+                fontSize: "clamp(24px, 4vw, 36px)",
+                color: "#8B4513",
+                margin: "0 0 0.5vh 0",
+                fontWeight: "bold",
+              }}
+            >
+              INDEX
+            </h1>
+            <div
+              style={{
+                width: "80px",
+                height: "2px",
+                background: "#8B4513",
+                margin: "0 auto 0.5vh",
+              }}
+            />
+            <p style={{ fontSize: "clamp(12px, 1.5vw, 16px)", color: "#555", margin: 0 }}>
+              Click on any item to view the product gallery.
+            </p>
+          </div>
 
-    // Page 4 - THANK YOU PAGE (RIGHT SIDE)
-    // ... (same as before)
+          {/* Index Content Container */}
+          <div style={{ flex: 1, width: "100%", maxWidth: "90vw", margin: "0 auto" }}>
+            <div>
+              {[
+                { number: "1.", name: "200ml", id: "200ml" },
+                { number: "2.", name: "250ml", id: "250ml" },
+                { number: "3.", name: "300ml", id: "300ml" },
+                { number: "4.", name: "500ml", id: "500ml" },
+                { number: "5.", name: "700ml", id: "700ml" },
+                { number: "6.", name: "1 Liter", id: "1liter" },
+              ].map((item) => (
+                <div
+                  key={item.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "1vh 1.5vw",
+                    marginBottom: "0.8vh",
+                    background: "#f8f9fa",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "clamp(14px, 2vw, 18px)",
+                    fontWeight: 500,
+                    color: "#333",
+                    border: "1px solid transparent",
+                    transition: "all 0.3s ease",
+                  }}
+                  onClick={() => openProductGallery(item.id)}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#e3f2fd";
+                    e.currentTarget.style.borderColor = "#2196f3";
+                    e.currentTarget.style.transform = "translateX(6px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "#f8f9fa";
+                    e.currentTarget.style.borderColor = "transparent";
+                    e.currentTarget.style.transform = "translateX(0)";
+                  }}
+                >
+                  <span style={{ fontWeight: "bold", marginRight: "12px", color: "#8B4513", minWidth: "35px" }}>
+                    {item.number}
+                  </span>
+                  <span>{item.name}</span>
+                  <span style={{ marginLeft: "auto", color: "#2196f3", fontSize: "1em" }}>→</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Biodegradable */}
+            <div style={{ marginTop: "2vh" }}>
+              <h2
+                style={{
+                  fontSize: "clamp(18px, 2.5vw, 22px)",
+                  fontWeight: "bold",
+                  color: "#8B4513",
+                  marginBottom: "1vh",
+                }}
+              >
+                7. Biodegradable
+              </h2>
+              <div style={{ paddingLeft: "1vw" }}>
+                {[
+                  { number: "7.1", name: "Biodegradable 200ml", id: "bio-200ml" },
+                  { number: "7.2", name: "Biodegradable 250ml", id: "bio-250ml" },
+                  { number: "7.3", name: "Biodegradable 300ml", id: "bio-300ml" },
+                  { number: "7.4", name: "Biodegradable 500ml", id: "bio-500ml" },
+                ].map((item) => (
+                  <div
+                    key={item.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "1vh 1.5vw",
+                      marginBottom: "0.6vh",
+                      background: "#f1f8e9",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "clamp(14px, 2vw, 18px)",
+                      fontWeight: 500,
+                      color: "#333",
+                      border: "1px solid transparent",
+                      transition: "all 0.3s ease",
+                    }}
+                    onClick={() => openProductGallery(item.id)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#c8e6c9";
+                      e.currentTarget.style.borderColor = "#4caf50";
+                      e.currentTarget.style.transform = "translateX(6px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "#f1f8e9";
+                      e.currentTarget.style.borderColor = "transparent";
+                      e.currentTarget.style.transform = "translateX(0)";
+                    }}
+                  >
+                    <span style={{ fontWeight: "bold", marginRight: "12px", color: "#4caf50", minWidth: "45px" }}>
+                      {item.number}
+                    </span>
+                    <span>{item.name}</span>
+                    <span style={{ marginLeft: "auto", color: "#4caf50", fontSize: "1em" }}>→</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
+    // Page 4 - THANK YOU PAGE
+    {
+      type: "thankyou",
+      content: (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            padding: "clamp(16px, 3vh, 32px)",
+            boxSizing: "border-box",
+            background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              textAlign: "center",
+              color: colors.textDark,
+              zIndex: 2,
+              width: "100%",
+              maxWidth: "680px",
+            }}
+          >
+            {/* Logo */}
+            <div
+              style={{
+                marginBottom: "0.6rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src="/Vedic Jal.png"
+                alt="VedicJal Logo"
+                style={{
+                  width: "70px",
+                  height: "70px",
+                  marginBottom: "0.4rem",
+                  borderRadius: "14px",
+                  boxShadow: "0 6px 15px rgba(0,0,0,0.08)",
+                  border: "2.5px solid #ffffff",
+                }}
+              />
+            </div>
+
+            {/* Heading */}
+            <h1
+              style={{
+                fontSize: "clamp(1.8rem, 6vw, 3rem)",
+                fontWeight: 800,
+                margin: "0 0 0.6rem 0",
+                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                lineHeight: 0.95,
+                fontFamily: "Inter, sans-serif",
+              }}
+            >
+              Thank You
+            </h1>
+
+            {/* Divider */}
+            <div
+              style={{
+                width: "70px",
+                height: "2px",
+                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`,
+                margin: "0 auto 0.8rem auto",
+                borderRadius: "1px",
+              }}
+            />
+
+            {/* Subtext */}
+            <p
+              style={{
+                fontSize: "clamp(0.95rem, 2.4vw, 1.2rem)",
+                margin: "0 0 0.4rem 0",
+                fontWeight: 600,
+                color: colors.textDark,
+                fontFamily: "Inter, sans-serif",
+              }}
+            >
+              For choosing VedicJal
+            </p>
+
+            {/* Body text */}
+            <p
+              style={{
+                fontSize: "clamp(0.9rem, 2vw, 1.1rem)",
+                fontWeight: 400,
+                color: colors.textMedium,
+                fontFamily: "Inter, sans-serif",
+                lineHeight: 1.5,
+                maxWidth: "380px",
+                margin: "0 auto 1rem auto",
+              }}
+            >
+              Your trust in our premium handcrafted water bottles means the world to us.
+            </p>
+
+            {/* Quote */}
+            <div
+              style={{
+                padding: "0.6rem 1.4rem",
+                border: `1.5px solid ${colors.borderLight}`,
+                borderRadius: "10px",
+                background: "rgba(59, 130, 246, 0.05)",
+                display: "inline-block",
+                boxShadow: `0 2px 10px ${colors.shadowLight}`,
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "1rem",
+                  margin: 0,
+                  fontWeight: 500,
+                  color: colors.primary,
+                  fontFamily: "Inter, sans-serif",
+                  fontStyle: "italic",
+                }}
+              >
+                "Pure Water, Pure Life"
+              </p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
   ];
 
   const totalSpreads = 3; // Cover (0), Image Spread (1), Index+ThankYou (2)
@@ -6029,7 +6398,122 @@ const FlipBook = () => {
 
   // Product Gallery Component
   const ProductGallery = ({ productId }) => {
-    // ... (same as before)
+    const product = productData[productId];
+    if (!product) return null;
+
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0, 0, 0, 0.9)",
+          zIndex: 1000,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
+          style={{
+            padding: "1rem 2rem",
+            background: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(10px)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h2
+            style={{
+              color: "white",
+              fontSize: "1.5rem",
+              fontWeight: 600,
+              margin: 0,
+            }}
+          >
+            {product.title}
+          </h2>
+          <button
+            style={{
+              background: "rgba(255, 255, 255, 0.2)",
+              border: "none",
+              color: "white",
+              fontSize: "1.5rem",
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.3s ease",
+            }}
+            onClick={closeGallery}
+            onMouseEnter={(e) => {
+              e.target.style.background = "rgba(255, 255, 255, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "rgba(255, 255, 255, 0.2)";
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            padding: "2rem",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "1.5rem",
+            overflowY: "auto",
+          }}
+        >
+          {product.images.map((image, index) => (
+            <div
+              key={index}
+              style={{
+                background: "rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                overflow: "hidden",
+                transition: "all 0.3s ease",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+              }}
+            >
+              <img
+                src={image || "/placeholder.svg"}
+                alt={`${product.title} ${index + 1}`}
+                style={{
+                  width: "100%",
+                  height: "300px",
+                  objectFit: "cover",
+                }}
+              />
+              <div
+                style={{
+                  padding: "1rem",
+                  color: "white",
+                  textAlign: "center",
+                }}
+              >
+                <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 500 }}>Model {index + 1}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   // Show gallery if selected
@@ -6068,7 +6552,163 @@ const FlipBook = () => {
           zIndex: 20,
         }}
       >
-        {/* ... (same as before) */}
+        {/* Header - only shown on mobile */}
+        {windowWidth <= 768 && (
+          <div
+            style={{
+              padding: "1rem",
+              background: colors.backgroundWhite,
+              display: "flex",
+              alignItems: "center",
+              position: "sticky",
+              left: 0,
+              zIndex: 10,
+              borderBottom: `1px solid ${colors.borderLight}`,
+              minWidth: "max-content",
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+                color: colors.textDark,
+                fontSize: "1rem",
+                fontWeight: 600,
+                whiteSpace: "nowrap",
+              }}
+            >
+              Page Navigation
+            </h3>
+          </div>
+        )}
+
+        {/* Thumbnails */}
+        <div
+          className="page-thumbnails"
+          style={{
+            flex: 1,
+            padding: windowWidth <= 768 ? "0.5rem" : "0.5rem",
+            background: colors.backgroundLight,
+            display: "flex",
+            flexDirection: windowWidth <= 768 ? "row" : "column",
+            gap: windowWidth <= 768 ? "0.5rem" : "0",
+          }}
+        >
+          {pages.map((page, index) => {
+            let targetSpread = index === 0 ? 0 : Math.ceil(index / 2);
+            const isActive = targetSpread === currentSpread;
+
+            return (
+              <div
+                key={index}
+                className="thumbnail"
+                style={{
+                  marginBottom: windowWidth <= 768 ? 0 : "0.5rem",
+                  border: isActive ? `2px solid ${colors.primary}` : "2px solid transparent",
+                  borderRadius: "6px",
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  background: colors.backgroundWhite,
+                  boxShadow: isActive
+                    ? `0 4px 20px rgba(59, 130, 246, 0.25)`
+                    : `0 2px 8px ${colors.shadowLight}`,
+                  height: windowWidth <= 768 ? "100px" : "120px",
+                  width: windowWidth <= 768 ? "80px" : "auto",
+                  minWidth: windowWidth <= 768 ? "80px" : "auto",
+                  flexShrink: 0,
+                  position: "relative",
+                }}
+                onClick={() => goToSpread(targetSpread)}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderColor = colors.primary;
+                    e.currentTarget.style.transform = "scale(1.02)";
+                    e.currentTarget.style.boxShadow = `0 4px 16px ${colors.shadowMedium}`;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderColor = "transparent";
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.boxShadow = `0 2px 8px ${colors.shadowLight}`;
+                  }
+                }}
+              >
+                {/* Thumbnail preview */}
+                <div
+                  style={{
+                    width: "100%",
+                    height: windowWidth <= 768 ? "80px" : "100px",
+                    overflow: "hidden",
+                    position: "relative",
+                    background: "#f8f9fa",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      transform: "scale(0.08)",
+                      transformOrigin: "center center",
+                      width: "1200px",
+                      height: "800px",
+                      pointerEvents: "none",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {page && page.content}
+                  </div>
+                </div>
+                {/* Page number */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    left: "0",
+                    right: "0",
+                    background: colors.textDark,
+                    color: "white",
+                    padding: "4px 8px",
+                    fontSize: "0.7rem",
+                    fontWeight: 500,
+                    textAlign: "center",
+                    height: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {index + 1}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Resize Handle - only on desktop */}
+        {windowWidth > 768 && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: "4px",
+              height: "100%",
+              background: "transparent",
+              cursor: "col-resize",
+              zIndex: 10,
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseEnter={(e) => {
+              e.target.style.background = colors.primary;
+              e.target.style.opacity = "0.5";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "transparent";
+            }}
+          />
+        )}
       </div>
 
       {/* Main Flipbook */}
@@ -6116,59 +6756,42 @@ const FlipBook = () => {
             />
           )}
 
-          {/* Left Page - show blank page for closed book */}
-          <div
-            style={{
-              position: "absolute",
-              width: isClosedBook ? "50%" : "50%",
-              height: "100%",
-              background: isClosedBook ? "#f0f9ff" : colors.backgroundWhite,
-              border: `1px solid ${colors.borderLight}`,
-              boxShadow: isClosedBook ? "none" : `0 8px 32px ${colors.shadowMedium}`,
-              overflow: "hidden",
-              left: 0,
-              borderTopLeftRadius: "12px",
-              borderBottomLeftRadius: "12px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {!isClosedBook && getCurrentLeftPage() && getCurrentLeftPage().content}
-            {isClosedBook && (
-              <div style={{
-                width: "100%",
+          {/* Left Page - hide for closed book */}
+          {!isClosedBook && (
+            <div
+              style={{
+                position: "absolute",
+                width: "50%",
                 height: "100%",
-                background: "#f0f9ff",
-                borderRight: "1px solid #e2e8f0",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-                {/* Back cover design - simple pattern */}
-                <div style={{
-                  width: "80%",
-                  height: "80%",
-                  background: "radial-gradient(circle, rgba(14,165,233,0.05) 0%, rgba(14,165,233,0) 70%)",
-                  borderRadius: "50%",
-                }} />
-              </div>
-            )}
-          </div>
+                background: colors.backgroundWhite,
+                border: `1px solid ${colors.borderLight}`,
+                boxShadow: `0 8px 32px ${colors.shadowMedium}`,
+                overflow: "hidden",
+                left: 0,
+                borderTopLeftRadius: "12px",
+                borderBottomLeftRadius: "12px",
+              }}
+            >
+              {getCurrentLeftPage() && getCurrentLeftPage().content}
+            </div>
+          )}
 
-          {/* Right Page - cover page for closed book */}
+          {/* Right Page */}
           <div
             style={{
               position: "absolute",
-              width: isClosedBook ? "50%" : "50%",
+              width: isClosedBook ? "100%" : "50%",
               height: "100%",
               background: colors.backgroundWhite,
               border: `1px solid ${colors.borderLight}`,
               boxShadow: `0 8px 32px ${colors.shadowMedium}`,
               overflow: "hidden",
               right: 0,
+              left: isClosedBook ? 0 : "auto",
               borderTopRightRadius: "12px",
               borderBottomRightRadius: "12px",
+              borderTopLeftRadius: isClosedBook ? "12px" : "0",
+              borderBottomLeftRadius: isClosedBook ? "12px" : "0",
             }}
           >
             {getCurrentRightPage() && getCurrentRightPage().content}
@@ -6228,7 +6851,118 @@ const FlipBook = () => {
           )}
         </div>
 
-        {/* ... (navigation same as before) */}
+        {/* Compact Navigation */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "1rem",
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(20px)",
+            padding: "0.5rem 1rem",
+            borderRadius: "30px",
+            boxShadow: `0 4px 16px ${colors.shadowMedium}`,
+            border: `1px solid ${colors.borderLight}`,
+            width: windowWidth <= 480 ? "95%" : "auto",
+          }}
+        >
+          <button
+            style={{
+              background:
+                currentSpread === 0
+                  ? colors.secondary
+                  : `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`,
+              color: "white",
+              border: "none",
+              padding: "0.5rem 1rem",
+              borderRadius: "15px",
+              cursor: currentSpread === 0 ? "not-allowed" : "pointer",
+              fontWeight: 600,
+              fontSize: "0.8rem",
+              transition: "all 0.3s ease",
+              boxShadow: currentSpread === 0 ? "none" : "0 2px 8px rgba(59, 130, 246, 0.3)",
+              minWidth: "40px",
+              height: "32px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={prevSpread}
+            disabled={currentSpread === 0}
+            onMouseEnter={(e) => {
+              if (currentSpread !== 0) {
+                e.target.style.transform = "translateY(-1px)";
+                e.target.style.boxShadow = "0 4px 12px rgba(59, 130, 246, 0.4)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (currentSpread !== 0) {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.3)";
+              }
+            }}
+          >
+            ←
+          </button>
+          <div
+            style={{
+              color: colors.textDark,
+              fontWeight: 600,
+              fontSize: "0.8rem",
+              padding: "0 0.5rem",
+              minWidth: "120px",
+              textAlign: "center",
+            }}
+          >
+            {currentSpread === 0
+              ? "Cover"
+              : currentSpread === 1
+                ? "Intro"
+                : currentSpread === 2
+                  ? "Index & Thank You"
+                  : `Spread ${currentSpread}`}{" "}
+            / {totalSpreads}
+          </div>
+          <button
+            style={{
+              background:
+                currentSpread >= totalSpreads - 1
+                  ? colors.secondary
+                  : `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`,
+              color: "white",
+              border: "none",
+              padding: "0.5rem 1rem",
+              borderRadius: "15px",
+              cursor: currentSpread >= totalSpreads - 1 ? "not-allowed" : "pointer",
+              fontWeight: 600,
+              fontSize: "0.8rem",
+              transition: "all 0.3s ease",
+              boxShadow: currentSpread >= totalSpreads - 1 ? "none" : "0 2px 8px rgba(59, 130, 246, 0.3)",
+              minWidth: "40px",
+              height: "32px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={nextSpread}
+            disabled={currentSpread >= totalSpreads - 1}
+            onMouseEnter={(e) => {
+              if (currentSpread < totalSpreads - 1) {
+                e.target.style.transform = "translateY(-1px)";
+                e.target.style.boxShadow = "0 4px 12px rgba(59, 130, 246, 0.4)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (currentSpread < totalSpreads - 1) {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.3)";
+              }
+            }}
+          >
+            →
+          </button>
+        </div>
       </div>
 
       {/* CSS animations */}
