@@ -1660,7 +1660,7 @@ const FlipBook = () => {
           <p>A brand owned by Anugya FMCG Industries</p>
           <p>E-153 Forest Lane, Near Country Club</p>
           <p>Sainik Farms, New Delhi – 110068</p>
-          <p>📞 <span className="text-green-800 font-medium">+91 98765 43210</span></p>
+          <p>📞 <span className="text-green-800 font-medium">+91- 9810152783/9818088458</span></p>
           <p>
             📧{" "}
             <a
