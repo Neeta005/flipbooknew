@@ -1031,6 +1031,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Droplet, Leaf, X, Plus, Minus, Maximize, Phone, Mail, MapPin } from "lucide-react"
 import {Instagram, Facebook } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 const FlipBook = () => {
   const [currentSpread, setCurrentSpread] = useState(0)
@@ -1623,74 +1624,45 @@ const FlipBook = () => {
   id: "contact",
   type: "contact",
   content: (
-    <div className="w-full h-full p-4 md:p-6 box-border bg-gradient-to-br from-white to-green-50 flex flex-col justify-center relative overflow-hidden select-none">
+    <div className="w-full h-full p-4 md:p-6 box-border bg-gradient-to-br from-white to-green-50 flex flex-col justify-center items-center overflow-auto select-none">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-green-800 z-10 w-full max-w-2xl mx-auto text-center"
+        className="text-green-800 w-full max-w-md text-center space-y-3"
       >
-        {/* Header */}
+        {/* Title */}
         <motion.h1
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 font-serif"
+          className="text-xl sm:text-2xl font-bold font-serif"
         >
           Contact Us
         </motion.h1>
 
+        {/* Divider */}
         <motion.div
-          className="w-10 sm:w-12 h-1 bg-green-600 mx-auto mb-3 rounded-full"
+          className="w-10 sm:w-12 h-1 bg-green-600 mx-auto rounded-full"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
         />
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="text-xs sm:text-sm text-green-700 mb-4 px-2 sm:px-4"
-        >
-          Get in touch for your water bottle needs.
-        </motion.p>
-
-        {/* Contact Information */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4 px-2">
-          {[
-            { icon: Phone, title: "Call", info: "+91 98765 43210", delay: 0.7 },
-            { icon: Mail, title: "Email", info: "info@vedicjal.com", delay: 0.8 },
-            { icon: MapPin, title: "Visit", info: "Mumbai, Maharashtra", delay: 0.9 },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: item.delay, duration: 0.5 }}
-              className="bg-white/80 p-3 rounded-lg border border-green-200 shadow-sm hover:shadow-md transition-all text-center"
-              whileHover={{ scale: 1.03 }}
-            >
-              <item.icon className="w-5 h-5 text-green-600 mx-auto mb-1" />
-              <h3 className="text-sm font-semibold text-green-800">{item.title}</h3>
-              <p className="text-xs text-green-700 break-words text-wrap">{item.info}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Company Info */}
+        {/* Details */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.5 }}
-          className="text-xs text-green-700 bg-white/90 border border-green-200 p-3 rounded-lg shadow-sm leading-snug mx-2 sm:mx-4"
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="bg-white/90 p-4 rounded-xl shadow border border-green-200 text-xs sm:text-sm text-green-700 leading-relaxed space-y-1"
         >
-          <p className="font-semibold text-green-800">Vedicjal</p>
-          <p className="break-words text-wrap">A brand of Anugya FMCG Industries</p>
-          <p className="break-words text-wrap">E-153 Forest Lane, Near Country Club</p>
+          <p className="font-bold text-green-800 text-sm">Vedicjal</p>
+          <p>A brand owned by Anugya FMCG Industries</p>
+          <p>E-153 Forest Lane, Near Country Club</p>
           <p>Sainik Farms, New Delhi – 110068</p>
+          <p>📞 <span className="text-green-800 font-medium">+91 98765 43210</span></p>
           <p>
-            Email:{" "}
+            📧{" "}
             <a
               href="mailto:info@vedicjal.com"
               className="underline text-green-800 break-all"
@@ -1699,7 +1671,7 @@ const FlipBook = () => {
             </a>
           </p>
           <p>
-            Website:{" "}
+            🌐{" "}
             <a
               href="https://vedicjal.com"
               target="_blank"
@@ -1710,8 +1682,8 @@ const FlipBook = () => {
             </a>
           </p>
 
-          {/* Social Media Icons */}
-          <div className="flex justify-center gap-4 mt-3 text-green-600">
+          {/* Social Media */}
+          <div className="flex justify-center gap-4 pt-2 text-green-600">
             <a
               href="https://www.instagram.com/vedic_jal?utm_source=qr&igsh=MXI1OG90MjFyM2E0OA=="
               target="_blank"
@@ -1734,8 +1706,7 @@ const FlipBook = () => {
               rel="noopener noreferrer"
               aria-label="WhatsApp"
             >
-              <Phone className="w-5 h-5 hover:text-green-800" />
-              {/* Replace with FaWhatsapp if needed */}
+              <FaWhatsapp className="w-5 h-5 hover:text-green-800" />
             </a>
           </div>
         </motion.div>
@@ -1743,6 +1714,8 @@ const FlipBook = () => {
     </div>
   ),
 }
+
+
 
 
 
