@@ -5410,7 +5410,7 @@ const FlipBook = () => {
       images: ["/500ml bio.jpeg"],
     },
     "bio-750ml": {
-      title: "Biodegradable 500ml",
+      title: "Biodegradable 750ml",
       images: ["/750ml bio.jpeg"],
     },
   }
@@ -5736,6 +5736,7 @@ const FlipBook = () => {
                 { number: "7.2", name: "Biodegradable 250ml", id: "bio-250ml" },
                 { number: "7.3", name: "Biodegradable 300ml", id: "bio-300ml" },
                 { number: "7.4", name: "Biodegradable 500ml", id: "bio-500ml" },
+                { number: "7.5", name: "Biodegradable 750ml", id: "bio-750ml" },
               ].map((item, index) => (
                 <motion.div
                   key={item.id}
