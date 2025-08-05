@@ -8,35 +8,28 @@ export async function GET(request: NextRequest) {
 
   console.log("=== WATERMARK API START ===")
   console.log("Environment:", process.env.NODE_ENV)
-  console.log("Platform:", process.platform)
   console.log("Image URL requested:", imageUrl)
-  console.log("Current working directory:", process.cwd())
 
   if (!imageUrl) {
     console.log("❌ No image URL provided")
     return new NextResponse("Image URL is required", { status: 400 })
   }
 
-  // Basic validation to ensure it's a local path
   if (!imageUrl.startsWith("/")) {
     console.log("❌ Invalid image URL - doesn't start with /")
     return new NextResponse("Invalid image URL", { status: 403 })
   }
 
   try {
-    // Try multiple possible paths for the image
     const possiblePaths = [
       join(process.cwd(), "public", imageUrl),
       join(process.cwd(), imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl),
       join(process.cwd(), "public", imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl),
     ]
 
-    console.log("Possible paths to try:", possiblePaths)
-
     let imageBuffer: Buffer | null = null
     let foundPath = ""
 
-    // Try to find the image in different locations
     for (const path of possiblePaths) {
       try {
         console.log("🔍 Trying path:", path)
@@ -44,10 +37,9 @@ export async function GET(request: NextRequest) {
         imageBuffer = await readFile(path)
         foundPath = path
         console.log("✅ Found image at:", foundPath)
-        console.log("📊 Image buffer size:", imageBuffer.length, "bytes")
         break
       } catch (error) {
-        console.log("❌ Path not found:", path, error.message)
+        console.log("❌ Path not found:", path)
         continue
       }
     }
@@ -57,16 +49,8 @@ export async function GET(request: NextRequest) {
       return new NextResponse("Image not found", { status: 404 })
     }
 
-    // Check if Sharp is available
-    console.log("🔧 Attempting to load Sharp...")
-    let sharp
-    try {
-      sharp = (await import("sharp")).default
-      console.log("✅ Sharp loaded successfully")
-    } catch (sharpError) {
-      console.error("❌ Sharp loading failed:", sharpError)
-      throw new Error(`Sharp loading failed: ${sharpError.message}`)
-    }
+    console.log("🔧 Loading Sharp...")
+    const sharp = (await import("sharp")).default
 
     const image = sharp(imageBuffer)
     const metadata = await image.metadata()
@@ -75,76 +59,121 @@ export async function GET(request: NextRequest) {
       throw new Error("Could not get image dimensions")
     }
 
-    console.log("📐 Image metadata:", {
-      width: metadata.width,
-      height: metadata.height,
-      format: metadata.format,
-      size: metadata.size,
-    })
+    console.log("📐 Image dimensions:", metadata.width, "x", metadata.height)
 
-    // Define watermark text and properties
+    // Calculate watermark properties
     const watermarkText = "VedicJal"
-    const fontSize = Math.max(20, Math.min(metadata.width / 10, metadata.height / 10))
-    const opacity = 0.3
-    const textColor = "#16a34a"
+    const fontSize = Math.max(24, Math.min(metadata.width / 8, metadata.height / 8))
+    const opacity = 0.25
 
-    console.log("🎨 Watermark settings:", {
-      text: watermarkText,
-      fontSize,
-      opacity,
-      textColor,
-    })
+    console.log("🎨 Watermark settings:", { fontSize, opacity })
 
-    // Create SVG for the watermark
+    // Create a more reliable SVG watermark with embedded font fallbacks
     const svgText = `
-      <svg width="${metadata.width}" height="${metadata.height}">
-        <text
-          x="50%"
-          y="50%"
-          font-family="Arial, sans-serif"
-          font-size="${fontSize}"
-          fill="${textColor}"
-          fill-opacity="${opacity}"
-          text-anchor="middle"
-          dominant-baseline="middle"
-          transform="rotate(-30 ${metadata.width / 2} ${metadata.height / 2})"
-        >
-          ${watermarkText}
-        </text>
+      <svg width="${metadata.width}" height="${metadata.height}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .watermark-text {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+              font-size: ${fontSize}px;
+              font-weight: bold;
+              fill: #16a34a;
+              fill-opacity: ${opacity};
+              text-anchor: middle;
+              dominant-baseline: central;
+            }
+          </style>
+        </defs>
+        <g transform="translate(${metadata.width / 2}, ${metadata.height / 2}) rotate(-30)">
+          <text class="watermark-text" x="0" y="0">${watermarkText}</text>
+        </g>
       </svg>
     `
 
-    console.log("📝 SVG watermark created, length:", svgText.length)
+    console.log("📝 SVG watermark created")
 
-    // Composite the watermark onto the image
-    console.log("🔄 Starting image composition...")
-    const watermarkedImageBuffer = await image
-      .composite([
-        {
-          input: Buffer.from(svgText),
-          gravity: "center",
+    // Alternative approach: Create watermark using Sharp's text overlay
+    try {
+      console.log("🔄 Attempting Sharp text overlay...")
+
+      // Create a simple text watermark using Sharp's built-in text rendering
+      const watermarkBuffer = Buffer.from(
+        `<svg width="${metadata.width}" height="${metadata.height}">
+          <text 
+            x="50%" 
+            y="50%" 
+            font-family="Arial, Helvetica, sans-serif" 
+            font-size="${fontSize}" 
+            font-weight="bold"
+            fill="#16a34a" 
+            fill-opacity="${opacity}"
+            text-anchor="middle" 
+            dominant-baseline="middle"
+            transform="rotate(-30 ${metadata.width / 2} ${metadata.height / 2})"
+          >${watermarkText}</text>
+        </svg>`,
+      )
+
+      const watermarkedImageBuffer = await image
+        .composite([
+          {
+            input: watermarkBuffer,
+            gravity: "center",
+          },
+        ])
+        .jpeg({ quality: 90 })
+        .toBuffer()
+
+      console.log("✅ Watermark applied successfully with Sharp text overlay")
+      console.log("📊 Final image size:", watermarkedImageBuffer.length, "bytes")
+
+      return new NextResponse(watermarkedImageBuffer, {
+        headers: {
+          "Content-Type": "image/jpeg",
+          "Cache-Control": "public, max-age=31536000, immutable",
         },
-      ])
-      .jpeg({ quality: 90 })
-      .toBuffer()
+      })
+    } catch (textError) {
+      console.log("❌ Sharp text overlay failed, trying alternative method:", textError.message)
 
-    console.log("✅ Watermark applied successfully")
-    console.log("📊 Final image size:", watermarkedImageBuffer.length, "bytes")
-    console.log("=== WATERMARK API SUCCESS ===")
+      // Fallback: Create watermark using a different approach
+      const simpleWatermark = Buffer.from(
+        `<svg width="${metadata.width}" height="${metadata.height}" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(${metadata.width / 2}, ${metadata.height / 2}) rotate(-30)">
+            <text 
+              x="0" 
+              y="0" 
+              style="font-family: sans-serif; font-size: ${fontSize}px; font-weight: bold; fill: rgba(22, 163, 74, ${opacity}); text-anchor: middle; dominant-baseline: central;"
+            >${watermarkText}</text>
+          </g>
+        </svg>`,
+      )
 
-    return new NextResponse(watermarkedImageBuffer, {
-      headers: {
-        "Content-Type": "image/jpeg",
-        "Cache-Control": "public, max-age=31536000, immutable",
-      },
-    })
+      const watermarkedImageBuffer = await image
+        .composite([
+          {
+            input: simpleWatermark,
+            gravity: "center",
+          },
+        ])
+        .jpeg({ quality: 90 })
+        .toBuffer()
+
+      console.log("✅ Watermark applied with fallback method")
+
+      return new NextResponse(watermarkedImageBuffer, {
+        headers: {
+          "Content-Type": "image/jpeg",
+          "Cache-Control": "public, max-age=31536000, immutable",
+        },
+      })
+    }
   } catch (error) {
     console.error("❌ Error processing image:", error)
-    console.error("Error stack:", error.stack)
 
-    // Fallback: try to return original image
+    // Fallback: return original image
     try {
-      console.log("🔄 Attempting fallback to original image...")
+      console.log("🔄 Returning original image as fallback...")
       const possiblePaths = [
         join(process.cwd(), "public", imageUrl),
         join(process.cwd(), imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl),
@@ -156,7 +185,6 @@ export async function GET(request: NextRequest) {
           const originalBuffer = await readFile(path)
           console.log("✅ Returning original image from:", path)
 
-          // Determine content type based on file extension
           const ext = imageUrl.toLowerCase().split(".").pop()
           const contentType =
             ext === "png"
@@ -174,15 +202,13 @@ export async function GET(request: NextRequest) {
             },
           })
         } catch (fallbackError) {
-          console.log("❌ Fallback path failed:", path, fallbackError.message)
           continue
         }
       }
 
       throw new Error("Could not find image in fallback")
     } catch (fallbackError) {
-      console.error("❌ Fallback error:", fallbackError)
-      console.log("=== WATERMARK API FAILED ===")
+      console.error("❌ Complete fallback failed:", fallbackError)
       return new NextResponse("Error processing image", { status: 500 })
     }
   }
