@@ -6,14 +6,20 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const imageUrl = searchParams.get("url")
 
-  console.log("Watermark API called with URL:", imageUrl)
+  console.log("=== WATERMARK API START ===")
+  console.log("Environment:", process.env.NODE_ENV)
+  console.log("Platform:", process.platform)
+  console.log("Image URL requested:", imageUrl)
+  console.log("Current working directory:", process.cwd())
 
   if (!imageUrl) {
+    console.log("❌ No image URL provided")
     return new NextResponse("Image URL is required", { status: 400 })
   }
 
   // Basic validation to ensure it's a local path
   if (!imageUrl.startsWith("/")) {
+    console.log("❌ Invalid image URL - doesn't start with /")
     return new NextResponse("Invalid image URL", { status: 403 })
   }
 
@@ -23,9 +29,9 @@ export async function GET(request: NextRequest) {
       join(process.cwd(), "public", imageUrl),
       join(process.cwd(), imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl),
       join(process.cwd(), "public", imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl),
-      // Add specific bio folder path
-      join(process.cwd(), "public", "bio", imageUrl.split("/").pop() || ""),
     ]
+
+    console.log("Possible paths to try:", possiblePaths)
 
     let imageBuffer: Buffer | null = null
     let foundPath = ""
@@ -33,25 +39,34 @@ export async function GET(request: NextRequest) {
     // Try to find the image in different locations
     for (const path of possiblePaths) {
       try {
-        console.log("Trying path:", path)
+        console.log("🔍 Trying path:", path)
         await access(path)
         imageBuffer = await readFile(path)
         foundPath = path
-        console.log("Found image at:", foundPath)
+        console.log("✅ Found image at:", foundPath)
+        console.log("📊 Image buffer size:", imageBuffer.length, "bytes")
         break
       } catch (error) {
-        console.log("Path not found:", path)
+        console.log("❌ Path not found:", path, error.message)
         continue
       }
     }
 
     if (!imageBuffer) {
-      console.error("Image not found in any of the paths:", possiblePaths)
+      console.error("❌ Image not found in any of the paths:", possiblePaths)
       return new NextResponse("Image not found", { status: 404 })
     }
 
-    // Import sharp dynamically to avoid build issues
-    const sharp = (await import("sharp")).default
+    // Check if Sharp is available
+    console.log("🔧 Attempting to load Sharp...")
+    let sharp
+    try {
+      sharp = (await import("sharp")).default
+      console.log("✅ Sharp loaded successfully")
+    } catch (sharpError) {
+      console.error("❌ Sharp loading failed:", sharpError)
+      throw new Error(`Sharp loading failed: ${sharpError.message}`)
+    }
 
     const image = sharp(imageBuffer)
     const metadata = await image.metadata()
@@ -60,49 +75,25 @@ export async function GET(request: NextRequest) {
       throw new Error("Could not get image dimensions")
     }
 
-    console.log("Processing image:", foundPath, "Dimensions:", metadata.width, "x", metadata.height)
-
-    // Watermark product images (bottle images)
-    const productPaths = [
-      "/200ml/",
-      "/250ml/",
-      "/300ml/",
-      "/500ml/",
-      "/750ml/",
-      "/1lit/",
-      "/bio/", // Updated to match your folder structure
-    ]
-
-    // Check if the image URL contains any of the product paths
-    const shouldWatermark = productPaths.some((path) => imageUrl.includes(path))
-
-    if (!shouldWatermark) {
-      console.log("Image does not require watermarking")
-
-      // Determine content type based on file extension
-      const ext = imageUrl.toLowerCase().split(".").pop()
-      const contentType =
-        ext === "png"
-          ? "image/png"
-          : ext === "jpg" || ext === "jpeg"
-            ? "image/jpeg"
-            : ext === "webp"
-              ? "image/webp"
-              : "image/jpeg"
-
-      return new NextResponse(imageBuffer, {
-        headers: {
-          "Content-Type": contentType,
-          "Cache-Control": "public, max-age=31536000, immutable",
-        },
-      })
-    }
+    console.log("📐 Image metadata:", {
+      width: metadata.width,
+      height: metadata.height,
+      format: metadata.format,
+      size: metadata.size,
+    })
 
     // Define watermark text and properties
     const watermarkText = "VedicJal"
     const fontSize = Math.max(20, Math.min(metadata.width / 10, metadata.height / 10))
     const opacity = 0.3
     const textColor = "#16a34a"
+
+    console.log("🎨 Watermark settings:", {
+      text: watermarkText,
+      fontSize,
+      opacity,
+      textColor,
+    })
 
     // Create SVG for the watermark
     const svgText = `
@@ -123,7 +114,10 @@ export async function GET(request: NextRequest) {
       </svg>
     `
 
+    console.log("📝 SVG watermark created, length:", svgText.length)
+
     // Composite the watermark onto the image
+    console.log("🔄 Starting image composition...")
     const watermarkedImageBuffer = await image
       .composite([
         {
@@ -134,7 +128,9 @@ export async function GET(request: NextRequest) {
       .jpeg({ quality: 90 })
       .toBuffer()
 
-    console.log("Watermark applied successfully")
+    console.log("✅ Watermark applied successfully")
+    console.log("📊 Final image size:", watermarkedImageBuffer.length, "bytes")
+    console.log("=== WATERMARK API SUCCESS ===")
 
     return new NextResponse(watermarkedImageBuffer, {
       headers: {
@@ -143,22 +139,22 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("Error processing image:", error)
+    console.error("❌ Error processing image:", error)
+    console.error("Error stack:", error.stack)
 
     // Fallback: try to return original image
     try {
+      console.log("🔄 Attempting fallback to original image...")
       const possiblePaths = [
         join(process.cwd(), "public", imageUrl),
         join(process.cwd(), imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl),
         join(process.cwd(), "public", imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl),
-        // Add specific bio folder path
-        join(process.cwd(), "public", "bio", imageUrl.split("/").pop() || ""),
       ]
 
       for (const path of possiblePaths) {
         try {
           const originalBuffer = await readFile(path)
-          console.log("Returning original image from:", path)
+          console.log("✅ Returning original image from:", path)
 
           // Determine content type based on file extension
           const ext = imageUrl.toLowerCase().split(".").pop()
@@ -178,13 +174,15 @@ export async function GET(request: NextRequest) {
             },
           })
         } catch (fallbackError) {
+          console.log("❌ Fallback path failed:", path, fallbackError.message)
           continue
         }
       }
 
       throw new Error("Could not find image in fallback")
     } catch (fallbackError) {
-      console.error("Fallback error:", fallbackError)
+      console.error("❌ Fallback error:", fallbackError)
+      console.log("=== WATERMARK API FAILED ===")
       return new NextResponse("Error processing image", { status: 500 })
     }
   }
