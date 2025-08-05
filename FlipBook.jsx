@@ -2872,29 +2872,29 @@ const FlipBook = () => {
     "750ml": {
       title: "750ml Water Bottles",
       images: [
-        "/img1.png",
-        "/img2.png",
-        "/img3.png",
-        "/img4.png",
-        "/img5.png",
-        "/img6.png",
-        "/img7.png",
-        "/img8.png",
-        "/img9.png",
-        "/img10.png",
-        "/img11.png",
-        "/img12.png",
-        "/img13.png",
-        "/img14.png",
-        "/img15.png",
-        "/img16.png",
-        "/img17.png",
-        "/img18.png",
-        "/img19.png",
-        "/img20.png",
-        "/img21.png",
-        "/img22.png",
-        "/img23.png",
+        "/750ml/img1.png",
+        "/750ml/img2.png",
+        "/750ml/img3.png",
+        "/750ml/img4.png",
+        "/750ml/img5.png",
+        "/750ml/img6.png",
+        "/750ml/img7.png",
+        "/750ml/img8.png",
+        "/750ml/img9.png",
+        "/750ml/img10.png",
+        "/750ml/img11.png",
+        "/750ml/img12.png",
+        "/750ml/img13.png",
+        "/750ml/img14.png",
+        "/750ml/img15.png",
+        "/750ml/img16.png",
+        "/750ml/img17.png",
+        "/750ml/img18.png",
+        "/750ml/img19.png",
+        "/750ml/img20.png",
+        "/750ml/img21.png",
+        "/750ml/img22.png",
+        "/750ml/img23.png",
       ],
     },
     "1liter": {
@@ -2916,23 +2916,23 @@ const FlipBook = () => {
     },
     "bio-200ml": {
       title: "Biodegradable 200ml",
-      images: ["/200ml bio.jpeg"],
+      images: ["/bio/200ml bio.png"],
     },
     "bio-250ml": {
       title: "Biodegradable 250ml",
-      images: ["/250ml bio.jpeg"],
+      images: ["/bio/250ml bio.png"],
     },
     "bio-300ml": {
       title: "Biodegradable 300ml",
-      images: ["/300ml bio.jpeg"],
+      images: ["/bio/300ml bio.png"],
     },
     "bio-500ml": {
       title: "Biodegradable 500ml",
-      images: ["/500ml bio.jpeg"],
+      images: ["/bio/500ml bio.png"],
     },
     "bio-750ml": {
       title: "Biodegradable 750ml",
-      images: ["/750ml bio.jpeg"],
+      images: ["/bio/750ml bio.png"],
     },
   }
   // Updated color palette to match VedicJal website (green theme)
@@ -3098,7 +3098,7 @@ const FlipBook = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <Image
-            src="/page1.jpg"
+            src="/page1.png"
             alt="VedicJal Workshop - Page 1"
             fill
             style={{ objectFit: "cover" }}
@@ -3126,7 +3126,7 @@ const FlipBook = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <Image
-            src="/page2.jpg"
+            src="/page2.png"
             alt="VedicJal Workshop - Page 2"
             fill
             style={{ objectFit: "cover" }}
