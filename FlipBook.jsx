@@ -2784,11 +2784,11 @@ const FlipBook = () => {
     "200ml": {
       title: "200ml Water Bottles",
       images: [
-        "/200ml/img1.png",
-        "/200ml/img2.png",
-        "/200ml/img3.png",
-        "/200ml/img4.png",
-        "/200ml/img5.png",
+        "200ml/img1.png",
+        "200ml/img2.png",
+        "200ml/img3.png",
+        "200ml/img4.png",
+        "200ml/img5.png",
         "/200ml/img6.png",
         "/200ml/img7.png",
         "/200ml/img8.png",
