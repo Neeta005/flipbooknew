@@ -117,90 +117,251 @@
 // }
 
 // export default WatermarkedImage
+// "use client"
+
+// import React, { useRef, useEffect, useState, useMemo } from "react"
+// import Image from "next/image"
+
+// interface WatermarkedImageProps {
+//   src: string
+//   alt: string
+//   width?: number
+//   height?: number
+//   fill?: boolean
+//   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"
+//   watermarkText?: string
+//   className?: string
+//   isPreview?: boolean // true for gallery, false/default for zoom
+// }
+
+// // Memory cache for processed images
+// const cache = new Map<string, string>()
+
+// const MAX_PREVIEW_WIDTH = 180
+// const MAX_PREVIEW_HEIGHT = 130
+
+// const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
+//   src,
+//   alt,
+//   width,
+//   height,
+//   fill,
+//   objectFit = "contain",
+//   watermarkText = "VedicJal",
+//   className,
+//   isPreview = false,
+// }) => {
+//   const canvasRef = useRef<HTMLCanvasElement>(null)
+//   const imgContainerRef = useRef<HTMLDivElement>(null)
+//   const [watermarkedSrc, setWatermarkedSrc] = useState<string | null>(null)
+//   const [inView, setInView] = useState(false)
+
+//   const cacheKey = useMemo(() => `${src}-${watermarkText}-${isPreview}`, [src, watermarkText, isPreview])
+
+//   // Intersection Observer for lazy watermarking
+//   useEffect(() => {
+//     if (cache.has(cacheKey)) {
+//       setWatermarkedSrc(cache.get(cacheKey)!)
+//       return
+//     }
+//     const observer = new window.IntersectionObserver((entries) => {
+//       entries.forEach(entry => {
+//         if (entry.isIntersecting) {
+//           setInView(true)
+//           observer.disconnect()
+//         }
+//       })
+//     })
+//     if (imgContainerRef.current) {
+//       observer.observe(imgContainerRef.current)
+//     }
+//     return () => observer.disconnect()
+//   }, [cacheKey])
+
+//   // Watermarking processing (only after inView)
+//   useEffect(() => {
+//     if (!inView) return;
+
+//     if (cache.has(cacheKey)) {
+//       setWatermarkedSrc(cache.get(cacheKey)!)
+//       return
+//     }
+
+//     const canvas = canvasRef.current
+//     if (!canvas) return
+//     const ctx = canvas.getContext("2d")
+//     if (!ctx) return
+
+//     const img = new window.Image()
+//     img.crossOrigin = "anonymous"
+//     img.onload = () => {
+//       let cW = img.naturalWidth
+//       let cH = img.naturalHeight
+//       if (isPreview) {
+//         const scale = Math.min(1, MAX_PREVIEW_WIDTH / cW, MAX_PREVIEW_HEIGHT / cH)
+//         cW = Math.round(cW * scale)
+//         cH = Math.round(cH * scale)
+//       }
+//       canvas.width = cW
+//       canvas.height = cH
+//       ctx.clearRect(0, 0, cW, cH)
+//       ctx.drawImage(img, 0, 0, cW, cH)
+
+//       ctx.font = `${Math.max(14, cW / 20)}px Arial`
+//       ctx.fillStyle = "rgba(0, 0, 0, 0.12)"
+//       ctx.textAlign = "center"
+//       ctx.textBaseline = "middle"
+//       ctx.save()
+//       ctx.translate(cW / 2, cH / 2)
+//       ctx.rotate(-Math.PI / 4)
+//       const textWidth = ctx.measureText(watermarkText).width
+//       const diagonal = Math.sqrt(cW * cW + cH * cH)
+//       const spacing = textWidth * 1.5
+//       for (let i = -diagonal / 2; i < diagonal / 2; i += spacing) {
+//         for (let j = -diagonal / 2; j < diagonal / 2; j += spacing) {
+//           ctx.fillText(watermarkText, i, j)
+//         }
+//       }
+//       ctx.restore()
+//       const dataUrl = canvas.toDataURL("image/png")
+//       cache.set(cacheKey, dataUrl)
+//       setWatermarkedSrc(dataUrl)
+//     }
+//     img.onerror = () => setWatermarkedSrc(src)
+//     img.src = src
+//   }, [cacheKey, inView, src, watermarkText, isPreview])
+
+//   // Placeholder before watermarking
+//   if (!watermarkedSrc) {
+//     return (
+//       <div ref={imgContainerRef} className={className} style={{ width: fill ? '100%' : width, height: fill ? '100%' : height, position: fill ? 'absolute' : 'relative' }}>
+//         <canvas ref={canvasRef} style={{ display: 'none' }} />
+//         <Image
+//           src="/placeholder.svg?height=80&width=120"
+//           alt="Loading image"
+//           fill={fill}
+//           width={width}
+//           height={height}
+//           className={className}
+//           style={{ objectFit }}
+//           loading="lazy"
+//         />
+//       </div>
+//     )
+//   }
+
+//   // Show watermarked image when ready
+//   return (
+//     <div ref={imgContainerRef} className={className} style={{ width: fill ? '100%' : width, height: fill ? '100%' : height, position: fill ? 'absolute' : 'relative' }}>
+//       <canvas ref={canvasRef} style={{ display: 'none' }} />
+//       <Image
+//         src={watermarkedSrc}
+//         alt={alt}
+//         fill={fill}
+//         width={width}
+//         height={height}
+//         className={className}
+//         style={{ objectFit }}
+//         onContextMenu={(e) => e.preventDefault()}
+//         draggable={false}
+//         loading="lazy"
+//       />
+//     </div>
+//   )
+// }
+
+// export default WatermarkedImage
 "use client"
+import { useState } from "react"
 import type React from "react"
-import { useMemo, useState } from "react"
+
 import Image from "next/image"
-import { Loader2 } from "lucide-react" // Import a loading icon
 
 interface WatermarkedImageProps {
   src: string
   alt: string
+  fill?: boolean
   width?: number
   height?: number
-  fill?: boolean
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"
-  watermarkText?: string
   className?: string
+  style?: React.CSSProperties
+  onError?: () => void
+}
+
+// Helper function to determine if an image should be watermarked
+const shouldWatermarkImage = (imagePath: string) => {
+  // Don't watermark logos
+  if (imagePath.includes("Vedic Jal.png") || imagePath.includes("VedicJal.png")) {
+    return false
+  }
+
+  // Don't watermark page images (page1.jpg, page2.jpg)
+  if (imagePath.includes("page1.jpg") || imagePath.includes("page2.jpg")) {
+    return false
+  }
+
+  // Watermark product images (bottle images)
+  const productPaths = ["/200ml/", "/250ml/", "/300ml/", "/500ml/", "/750ml/", "/1lit/", "/bio/"]
+
+  return productPaths.some((path) => imagePath.includes(path))
+}
+
+// Helper function to get watermarked image URL only for product images
+const getImageUrl = (originalUrl: string) => {
+  if (shouldWatermarkImage(originalUrl)) {
+    return `/api/watermark?url=${encodeURIComponent(originalUrl)}`
+  }
+  return originalUrl
 }
 
 const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
   src,
   alt,
+  fill,
   width,
   height,
-  fill,
   objectFit = "contain",
-  watermarkText = "VedicJal",
-  className,
+  className = "",
+  style,
+  onError,
 }) => {
+  const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Construct the full URL for the original image to be passed to the API route
-  const fullImageUrl = useMemo(() => {
-    if (src.startsWith("http://") || src.startsWith("https://")) {
-      return src
-    }
-    // For local paths, prepend the current origin
-    if (typeof window !== "undefined") {
-      return `${window.location.origin}${src}`
-    }
-    // Fallback for server-side rendering or if window is not defined
-    return src
-  }, [src])
+  const handleError = () => {
+    console.error("Watermarked image failed to load:", src)
+    setHasError(true)
+    setIsLoading(false)
+    if (onError) onError()
+  }
 
-  // Construct the URL for the server-side watermarking API
-  const watermarkedApiSrc = useMemo(() => {
-    const params = new URLSearchParams()
-    params.set("imageUrl", fullImageUrl)
-    params.set("watermarkText", watermarkText)
-    return `/api/watermark?${params.toString()}`
-  }, [fullImageUrl, watermarkText])
+  const handleLoad = () => {
+    setIsLoading(false)
+  }
 
-  // A very small, transparent SVG for blurDataURL
-  const blurSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect width='1' height='1' fill='%23f0fdf4'/%3E%3C/svg%3E`
+  // If there's an error, fall back to the original image
+  const imageSrc = hasError ? src : getImageUrl(src)
 
-  return (
-    <div
-      className={`${className} relative flex items-center justify-center`}
-      style={{
-        width: fill ? "100%" : width,
-        height: fill ? "100%" : height,
-        position: fill ? "absolute" : "relative",
-      }}
-    >
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 z-10">
-          <Loader2 className="h-8 w-8 animate-spin text-green-500" />
-        </div>
-      )}
-      <Image
-        src={watermarkedApiSrc || "/placeholder.svg"}
-        alt={alt}
-        fill={fill}
-        width={width}
-        height={height}
-        className={`${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
-        style={{ objectFit }}
-        onContextMenu={(e) => e.preventDefault()}
-        draggable="false"
-        placeholder="blur"
-        blurDataURL={blurSvg}
-        onLoad={() => setIsLoading(false)}
-        onError={() => setIsLoading(false)} // Also hide loader on error
-      />
-    </div>
-  )
+  const imageProps = {
+    src: imageSrc,
+    alt,
+    className: `${className} ${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-300`,
+    style: {
+      objectFit: objectFit as any,
+      ...style,
+    },
+    onError: handleError,
+    onLoad: handleLoad,
+    onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
+    draggable: false,
+  }
+
+  if (fill) {
+    return <Image {...imageProps} fill />
+  }
+
+  return <Image {...imageProps} width={width} height={height} />
 }
 
 export default WatermarkedImage
