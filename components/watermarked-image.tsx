@@ -119,9 +119,8 @@
 // export default WatermarkedImage
 "use client"
 import type React from "react"
-import { useState } from "react"
+import { useMemo } from "react"
 import Image from "next/image"
-import { Loader2 } from "lucide-react" // Import a loading icon
 
 interface WatermarkedImageProps {
   src: string
@@ -130,7 +129,7 @@ interface WatermarkedImageProps {
   height?: number
   fill?: boolean
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"
-  watermarkText?: string // This prop will now be decorative or for future use
+  watermarkText?: string
   className?: string
 }
 
@@ -141,45 +140,46 @@ const WatermarkedImage: React.FC<WatermarkedImageProps> = ({
   height,
   fill,
   objectFit = "contain",
-  // watermarkText is no longer used for client-side watermarking, but kept for interface consistency
-  // and potential future use if dynamic watermarking is re-introduced in a different context.
+  watermarkText = "VedicJal",
   className,
 }) => {
-  const [isLoading, setIsLoading] = useState(true)
+  // Construct the full URL for the original image to be passed to the API route
+  const fullImageUrl = useMemo(() => {
+    if (src.startsWith("http://") || src.startsWith("https://")) {
+      return src
+    }
+    // For local paths, prepend the current origin
+    if (typeof window !== "undefined") {
+      return `${window.location.origin}${src}`
+    }
+    // Fallback for server-side rendering or if window is not defined
+    // In a real Next.js app, you might need a base URL env var here
+    return src // This might not work if the server can't resolve local paths directly
+  }, [src])
 
-  // A very small, transparent SVG for blurDataURL
-  const blurSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect width='1' height='1' fill='%23f0fdf4'/%3E%3C/svg%3E`
+  // Construct the URL for the server-side watermarking API
+  const watermarkedApiSrc = useMemo(() => {
+    const params = new URLSearchParams()
+    params.set("imageUrl", fullImageUrl)
+    params.set("watermarkText", watermarkText)
+    return `/api/watermark?${params.toString()}`
+  }, [fullImageUrl, watermarkText])
 
   return (
-    <div
-      className={`${className} relative flex items-center justify-center`}
-      style={{
-        width: fill ? "100%" : width,
-        height: fill ? "100%" : height,
-        position: fill ? "absolute" : "relative",
-      }}
-    >
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 z-10">
-          <Loader2 className="h-8 w-8 animate-spin text-green-500" />
-        </div>
-      )}
-      <Image
-        src={src || "/placeholder.svg"} // Directly use the provided src (which will be the pre-watermarked URL)
-        alt={alt}
-        fill={fill}
-        width={width}
-        height={height}
-        className={`${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
-        style={{ objectFit }}
-        onContextMenu={(e) => e.preventDefault()}
-        draggable="false"
-        placeholder="blur"
-        blurDataURL={blurSvg}
-        onLoad={() => setIsLoading(false)}
-        onError={() => setIsLoading(false)} // Also hide loader on error
-      />
-    </div>
+    <Image
+      src={watermarkedApiSrc || "/placeholder.svg"}
+      alt={alt}
+      fill={fill}
+      width={width}
+      height={height}
+      className={className}
+      style={{ objectFit }}
+      onContextMenu={(e) => e.preventDefault()}
+      draggable="false"
+      // Optional: Add a placeholder or blurDataURL for better loading experience
+      // placeholder="blur"
+      // blurDataURL="/placeholder.svg?height=10&width=10"
+    />
   )
 }
 
