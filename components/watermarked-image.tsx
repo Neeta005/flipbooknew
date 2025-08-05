@@ -274,7 +274,6 @@
 "use client"
 import { useState } from "react"
 import type React from "react"
-
 import Image from "next/image"
 
 interface WatermarkedImageProps {
@@ -310,7 +309,8 @@ const shouldWatermarkImage = (imagePath: string) => {
 // Helper function to get watermarked image URL only for product images
 const getImageUrl = (originalUrl: string) => {
   if (shouldWatermarkImage(originalUrl)) {
-    return `/api/watermark?url=${encodeURIComponent(originalUrl)}`
+    // Use the simple watermark API
+    return `/api/watermark-simple?url=${encodeURIComponent(originalUrl)}`
   }
   return originalUrl
 }
