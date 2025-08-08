@@ -2352,13 +2352,47 @@ const FlipBook = () => {
                   </div>
                   <p className="text-gray-600 text-sm mt-2">High-quality water bottle with premium finish</p>
                   {/* Action Button */}
-                  <motion.button
-                    className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    View Details
-                  </motion.button>
+                 {/* WhatsApp Contact Button */}
+<motion.button
+  className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-2 px-4 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-sm flex items-center justify-center gap-2"
+  onClick={(e) => {
+    e.stopPropagation(); // Prevent opening zoom view
+    const productName = `${product.title} - Design ${index + 1}`;
+    const productCode = `${productId}-design-${index + 1}`;
+    const imageUrl = `${window.location.origin}${image}`;
+    
+    // Enhanced message with better image sharing instructions
+    const message = `🔔 NEW PRODUCT INQUIRY 🔔
+
+👤 Customer wants details for:
+🏷️ Product: ${productName}
+🆔 Product ID: ${productCode}
+
+📝 Customer Message:
+"Hi VedicJal! I'm interested in this water bottle design. Please share:
+• Pricing details
+• Customization options  
+• Minimum order quantity
+• Delivery timeline
+
+📷 PRODUCT IMAGE: ${imageUrl}
+(Please click the link above to view the product image)
+
+I'm ready to discuss further details. Looking forward to your response!"
+
+⏰ Inquiry Time: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
+
+🙏 Thank you!`;
+
+    const whatsappUrl = `https://wa.me/919810152783?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  }}
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+>
+  <FaWhatsapp className="w-4 h-4" />
+  Get Details on WhatsApp
+</motion.button>
                 </div>
               </motion.div>
             ))}
