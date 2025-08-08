@@ -1555,23 +1555,23 @@ const FlipBook = () => {
     },
     "bio-200ml": {
       title: "Biodegradable 200ml",
-      images: ["/200ml bio.jpeg"], // Corrected path
+      images: ["/bio/200ml bio.jpeg"], // Corrected path
     },
     "bio-250ml": {
       title: "Biodegradable 250ml",
-      images: ["/250ml bio.jpeg"], // Corrected path
+      images: ["/bio/250ml bio.jpeg"], // Corrected path
     },
     "bio-300ml": {
       title: "Biodegradable 300ml",
-      images: ["/300ml bio.jpeg"], // Corrected path
+      images: ["/bio/300ml bio.jpeg"], // Corrected path
     },
     "bio-500ml": {
       title: "Biodegradable 500ml",
-      images: ["/500ml bio.jpeg"], // Corrected path
+      images: ["/bio/500ml bio.jpeg"], // Corrected path
     },
     "bio-750ml": {
       title: "Biodegradable 750ml",
-      images: ["/750ml bio.jpeg"], // Corrected path
+      images: ["/bio/750ml bio.jpeg"], // Corrected path
     },
   }
   // Updated color palette to match VedicJal website (green theme)
